@@ -93,6 +93,7 @@ def predict_labels(herry_data):
                 sentiment_pred.append((TextBlob(row['answer_sentence']).sentiment[1] - 0.5) * 2)
     ans_data = {'comment_id' : comment_ids, 'answer_sentence' : answer_sentences, 'sentence_location' : sentence_locations, 'EPA_pred' : epa_pred, 'Sentiment_pred' : sentiment_pred}
     df_ans = pd.DataFrame(ans_data)
+    df_ans = df_ans[['comment_id', 'answer_sentence', 'sentence_location', 'EPA_pred', 'Sentiment_pred']]
     return df_ans
 
 
