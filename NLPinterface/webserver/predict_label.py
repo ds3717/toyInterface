@@ -10,15 +10,20 @@ from sklearn.metrics import roc_curve, auc, confusion_matrix
 from sklearn.tree import DecisionTreeClassifier
 import pandas, xgboost, numpy, textblob, string
 from textblob import TextBlob
+import pickle
 
 
-def train_model(classifier, feature_vector_train, label, feature_vector_valid, is_neural_net=False):
+def train_model(classifier, feature_vector_train, label, feature_vector_valid, is_neural_net=False, from_file=True):
+    if not from_file:
     # fit the training dataset on the classifier
-    classifier.fit(feature_vector_train, label)
-
-    # predict the labels on validation dataset
-    predictions = classifier.predict(feature_vector_valid)
-
+        classifier.fit(feature_vector_train, label)
+        f_name = 'model.sav'
+        pickle.dump(classifier, open(f_name, 'wb'))
+        # predict the labels on validation dataset
+        predictions = classifier.predict(feature_vector_valid)
+    else:
+        loaded_model = pickle.load(open('model.sav', 'rb'))
+        predictions = loaded_model.predict(feature_vector_valid)
     if is_neural_net:
         predictions = predictions.argmax(axis=-1)
     return predictions
